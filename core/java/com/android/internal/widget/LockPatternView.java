@@ -1007,9 +1007,7 @@ public class LockPatternView extends View {
     }
 
     private int getCurrentColor(boolean partOfPattern) {
-        if (!partOfPattern || (mInStealthMode && mPatternDisplayMode != DisplayMode.Wrong)
-                || (mPatternDisplayMode == DisplayMode.Wrong && !mShowErrorPath)
-                || mPatternInProgress) {
+        if (!partOfPattern || mInStealthMode || mPatternInProgress) {
             // unselected circle
             return mRegularColor;
         } else if (mPatternDisplayMode == DisplayMode.Wrong) {
@@ -1028,9 +1026,6 @@ public class LockPatternView extends View {
      */
     private void drawCircle(Canvas canvas, float centerX, float centerY, float size,
             boolean partOfPattern, float alpha) {
-        if (!mVisibleDots) {
-            return;
-        }
         mPaint.setColor(getCurrentColor(partOfPattern));
         mPaint.setAlpha((int) (alpha * 255));
         canvas.drawCircle(centerX, centerY, size/2, mPaint);
