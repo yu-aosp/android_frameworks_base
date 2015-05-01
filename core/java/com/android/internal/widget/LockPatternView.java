@@ -1007,6 +1007,8 @@ public class LockPatternView extends View {
         // TODO: the path should be created and cached every time we hit-detect a cell
         // only the last segment of the path should be computed here
         // draw the path of the pattern (unless we are in stealth mode)
+        // draw the path of the pattern (unless the user is in progress, and
+        // we are in stealth mode)
         final boolean drawPath = ((!mInStealthMode && mPatternDisplayMode != DisplayMode.Wrong)
                 || (mPatternDisplayMode == DisplayMode.Wrong && mShowErrorPath));
         if (drawPath) {
@@ -1066,9 +1068,7 @@ public class LockPatternView extends View {
     }
 
     private int getCurrentColor(boolean partOfPattern) {
-        if (!partOfPattern || (mInStealthMode && mPatternDisplayMode != DisplayMode.Wrong)
-                || (mPatternDisplayMode == DisplayMode.Wrong && !mShowErrorPath)
-                || mPatternInProgress) {
+        if (!partOfPattern || mInStealthMode || mPatternInProgress) {
             // unselected circle
             return mRegularColor;
         } else if (mPatternDisplayMode == DisplayMode.Wrong) {
@@ -1087,9 +1087,6 @@ public class LockPatternView extends View {
      */
     private void drawCircle(Canvas canvas, float centerX, float centerY, float size,
             boolean partOfPattern, float alpha) {
-        if (!mVisibleDots) {
-            return;
-        }
         mPaint.setColor(getCurrentColor(partOfPattern));
         mPaint.setAlpha((int) (alpha * 255));
         canvas.drawCircle(centerX, centerY, size/2, mPaint);
